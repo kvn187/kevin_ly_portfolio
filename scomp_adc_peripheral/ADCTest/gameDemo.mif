@@ -1,0 +1,140 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: 800F; --     CALL Init
+0001: 8018; --     CALL WaitAllDown
+0002: 801C; --     CALL GenerateTarget
+0003: 8027; --     CALL DisplayTarget
+0004: 0872; --     LOAD ZeroVal
+0005: 9801; --     OUT LEDs 
+0006: 8037; --     CALL ReadADC
+0007: 802F; --     CALL DisplayCurrentValue
+0008: 8047; --     CALL CompareToTarget
+0009: 8057; --     CALL DisplayFeedback
+000A: 087F; --     LOAD WinFlag
+000B: 7006; --     JZERO GameLoop
+000C: 8065; --     CALL WinPause
+000D: 806D; --     CALL IncrementScore
+000E: 5801; --     JUMP MainLoop
+000F: 0872; --     LOAD ZeroVal
+0010: 107C; --     STORE Counter
+0011: 107D; --     STORE Target
+0012: 107E; --     STORE ADCValue
+0013: 107F; --     STORE WinFlag
+0014: 1080; --     STORE Score
+0015: 1081; --     STORE Diff
+0016: 1082; --     STORE DelayCount
+0017: 8800; --     RETURN
+0018: 9000; --     IN Switches
+0019: 9801; --     OUT LEDs
+001A: 7818; --     JNZ WaitAllDown
+001B: 8800; --     RETURN
+001C: 087C; --     LOAD Counter
+001D: 3001; --     ADDI 1
+001E: 107C; --     STORE Counter
+001F: 9000; --     IN Switches
+0020: 9801; --     OUT LEDs
+0021: 3877; --     AND SW9Mask
+0022: 701C; --     JZERO GenLoop
+0023: 087C; --     LOAD Counter
+0024: 3875; --     AND Mask8Bit
+0025: 107D; --     STORE Target
+0026: 8800; --     RETURN
+0027: 087D; --     LOAD Target
+0028: 3876; --     AND LowNibbleMask
+0029: 9806; --     OUT Hex2
+002A: 087D; --     LOAD Target
+002B: 5014; --     SHIFT -4
+002C: 3876; --     AND LowNibbleMask
+002D: 9807; --     OUT Hex3
+002E: 8800; --     RETURN
+002F: 087E; --     LOAD ADCValue
+0030: 3876; --     AND LowNibbleMask
+0031: 9804; --     OUT Hex0
+0032: 087E; --     LOAD ADCValue
+0033: 5014; --     SHIFT -4
+0034: 3876; --     AND LowNibbleMask
+0035: 9805; --     OUT Hex1
+0036: 8800; --     RETURN
+0037: 1800; --     LOADI 0
+0038: 98C3; --     OUT ADC_CHAN
+0039: 1802; --     LOADI 2
+003A: 98C0; --     OUT ADC_CTRL
+003B: 1801; --     LOADI 1
+003C: 98C0; --     OUT ADC_CTRL
+003D: 90C1; --     IN ADC_STAT
+003E: 3873; --     AND OneVal
+003F: 703D; --     JZERO PollADC
+0040: 90C2; --     IN ADC_DATA
+0041: 107E; --     STORE ADCValue
+0042: 087E; --     LOAD ADCValue
+0043: 5014; --     SHIFT -4
+0044: 3875; --     AND Mask8Bit
+0045: 107E; --     STORE ADCValue
+0046: 8800; --     RETURN
+0047: 0872; --     LOAD ZeroVal
+0048: 107F; --     STORE WinFlag
+0049: 087E; --     LOAD ADCValue
+004A: 287D; --     SUB Target
+004B: 1081; --     STORE Diff
+004C: 6850; --     JPOS DiffPositive
+004D: 0872; --     LOAD ZeroVal
+004E: 2881; --     SUB Diff
+004F: 1081; --     STORE Diff
+0050: 0881; --     LOAD Diff
+0051: 2874; --     SUB Tolerance
+0052: 6856; --     JPOS NotWin
+0053: 0873; --     LOAD OneVal
+0054: 107F; --     STORE WinFlag
+0055: 8800; --     RETURN
+0056: 8800; --     RETURN
+0057: 087F; --     LOAD WinFlag
+0058: 705C; --     JZERO CheckHighLow
+0059: 087A; --     LOAD AllOn
+005A: 9801; --     OUT LEDs
+005B: 8800; --     RETURN
+005C: 087E; --     LOAD ADCValue
+005D: 287D; --     SUB Target
+005E: 6862; --     JPOS TooHigh
+005F: 0878; --     LOAD LED0On
+0060: 9801; --     OUT LEDs
+0061: 8800; --     RETURN
+0062: 0879; --     LOAD LED1On
+0063: 9801; --     OUT LEDs
+0064: 8800; --     RETURN
+0065: 087B; --     LOAD DelayCountInit
+0066: 1082; --     STORE DelayCount
+0067: 0882; --     LOAD DelayCount
+0068: 37FF; --     ADDI -1
+0069: 1082; --     STORE DelayCount
+006A: 706C; --     JZERO WinPauseDone
+006B: 5867; --     JUMP WinPauseLoop
+006C: 8800; --     RETURN
+006D: 0880; --     LOAD Score
+006E: 3001; --     ADDI 1
+006F: 3875; --     AND Mask8Bit
+0070: 1080; --     STORE Score
+0071: 8800; --     RETURN
+0072: 0000; -- ZeroVal:        DW 0
+0073: 0001; -- OneVal:         DW 1
+0074: 0004; -- Tolerance:      DW 4
+0075: 00FF; -- Mask8Bit:       DW &H00FF
+0076: 000F; -- LowNibbleMask:  DW &H000F
+0077: 0200; -- SW9Mask:        DW &H0200
+0078: 0001; -- LED0On:         DW &H0001
+0079: 0002; -- LED1On:         DW &H0002
+007A: 03FF; -- AllOn:          DW &H03FF
+007B: 1388; -- DelayCountInit: DW 5000
+007C: 0000; -- Counter:        DW 0
+007D: 0000; -- Target:         DW 0
+007E: 0000; -- ADCValue:       DW 0
+007F: 0000; -- WinFlag:        DW 0
+0080: 0000; -- Score:          DW 0
+0081: 0000; -- Diff:           DW 0
+0082: 0000; -- DelayCount:     DW 0
+[0083..07FF] : 0000; -- [empty memory]
+END;

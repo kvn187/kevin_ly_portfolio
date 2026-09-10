@@ -1,0 +1,25 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: 1800; --         LOADI   0
+0001: 98C3; --         OUT     ADC_CHANNEL      ; select ADC channel 0
+0002: 1802; --         LOADI   2
+0003: 98C0; --         OUT     ADC_CTRL         ; CLEAR_READY
+0004: 1801; --         LOADI   1
+0005: 98C0; --         OUT     ADC_CTRL         ; START conversion
+0006: 90C1; --         IN      ADC_STATUS
+0007: 380E; --         AND     ONE              ; isolate READY bit
+0008: 7006; --         JZERO   WaitReady
+0009: 90C2; --         IN      ADC_DATA
+000A: 100F; --         STORE   SAMPLE
+000B: 080F; --         LOAD    SAMPLE
+000C: 9804; --         OUT     Hex0
+000D: 5802; --         JUMP    MainLoop
+000E: 0001; -- ONE:                DW      &H0001
+000F: 0000; -- SAMPLE:             DW      &H0000
+[0010..07FF] : 0000; -- [empty memory]
+END;

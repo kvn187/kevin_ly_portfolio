@@ -1,0 +1,175 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: 0893; --         LOAD    Zero
+0001: 108D; --         STORE   STATE
+0002: 108E; --         STORE   CUR_CH
+0003: 108F; --         STORE   ADC_VAL
+0004: 1090; --         STORE   COUNT
+0005: 1091; --         STORE   CHECK_OK
+0006: 1092; --         STORE   PASS_COUNT
+0007: 9801; --         OUT     LEDs
+0008: 9804; --         OUT     Hex0
+0009: 9805; --         OUT     Hex1
+000A: 088D; --         LOAD    STATE
+000B: 7013; --         JZERO   Step0Check
+000C: 088D; --         LOAD    STATE
+000D: 2894; --         SUB     One
+000E: 7024; --         JZERO   Step1Check
+000F: 088D; --         LOAD    STATE
+0010: 2895; --         SUB     Two
+0011: 7035; --         JZERO   Unlocked
+0012: 580A; --         JUMP    MainLoop
+0013: 089E; --         LOAD    LED_STEP0
+0014: 9801; --         OUT     LEDs
+0015: 0893; --         LOAD    Zero
+0016: 9805; --         OUT     Hex1
+0017: 8074; --         CALL    WaitForSW9High
+0018: 0893; --         LOAD    Zero
+0019: 108E; --         STORE   CUR_CH
+001A: 0893; --         LOAD    Zero
+001B: 1091; --         STORE   CHECK_OK
+001C: 8046; --         CALL    CheckStep0_3Times
+001D: 0891; --         LOAD    CHECK_OK
+001E: 7022; --         JZERO   Step0Done
+001F: 0894; --         LOAD    One
+0020: 108D; --         STORE   STATE
+0021: 8085; --         CALL    ShortDelay
+0022: 8078; --         CALL    WaitForSW9Low
+0023: 580A; --         JUMP    MainLoop
+0024: 089F; --         LOAD    LED_STEP1
+0025: 9801; --         OUT     LEDs
+0026: 0894; --         LOAD    One
+0027: 9805; --         OUT     Hex1
+0028: 8074; --         CALL    WaitForSW9High
+0029: 0894; --         LOAD    One
+002A: 108E; --         STORE   CUR_CH
+002B: 0893; --         LOAD    Zero
+002C: 1091; --         STORE   CHECK_OK
+002D: 805D; --         CALL    CheckStep1_3Times
+002E: 0891; --         LOAD    CHECK_OK
+002F: 7033; --         JZERO   Step1Done
+0030: 0895; --         LOAD    Two
+0031: 108D; --         STORE   STATE
+0032: 8085; --         CALL    ShortDelay
+0033: 8078; --         CALL    WaitForSW9Low
+0034: 580A; --         JUMP    MainLoop
+0035: 08A0; --         LOAD    LED_UNLOCK
+0036: 9801; --         OUT     LEDs
+0037: 08A1; --         LOAD    UNLOCK_HEX0
+0038: 9804; --         OUT     Hex0
+0039: 08A2; --         LOAD    UNLOCK_HEX1
+003A: 9805; --         OUT     Hex1
+003B: 583B; --         JUMP    UnlockLoop
+003C: 088E; --         LOAD    CUR_CH
+003D: 98C3; --         OUT     ADC_CHANNEL
+003E: 0897; --         LOAD    ADC_START
+003F: 98C0; --         OUT     ADC_CTRL
+0040: 90C1; --         IN      ADC_STATUS
+0041: 3898; --         AND     READY_MASK
+0042: 7040; --         JZERO   WaitReady
+0043: 90C2; --         IN      ADC_DATA
+0044: 108F; --         STORE   ADC_VAL
+0045: 8800; --         RETURN
+0046: 0893; --         LOAD    Zero
+0047: 1092; --         STORE   PASS_COUNT
+0048: 803C; --         CALL    ReadADC
+0049: 088F; --         LOAD    ADC_VAL
+004A: 9804; --         OUT     Hex0
+004B: 088F; --         LOAD    ADC_VAL
+004C: 289A; --         SUB     LOW0
+004D: 6059; --         JNEG    C0_Fail
+004E: 089B; --         LOAD    HIGH0
+004F: 288F; --         SUB     ADC_VAL
+0050: 6059; --         JNEG    C0_Fail
+0051: 0892; --         LOAD    PASS_COUNT
+0052: 2094; --         ADD     One
+0053: 1092; --         STORE   PASS_COUNT
+0054: 0892; --         LOAD    PASS_COUNT
+0055: 2896; --         SUB     Three
+0056: 705A; --         JZERO   C0_Success
+0057: 807D; --         CALL    TinyDelay
+0058: 5848; --         JUMP    C0_Loop
+0059: 8800; --         RETURN
+005A: 0894; --         LOAD    One
+005B: 1091; --         STORE   CHECK_OK
+005C: 8800; --         RETURN
+005D: 0893; --         LOAD    Zero
+005E: 1092; --         STORE   PASS_COUNT
+005F: 803C; --         CALL    ReadADC
+0060: 088F; --         LOAD    ADC_VAL
+0061: 9804; --         OUT     Hex0
+0062: 088F; --         LOAD    ADC_VAL
+0063: 289C; --         SUB     LOW1
+0064: 6070; --         JNEG    C1_Fail
+0065: 089D; --         LOAD    HIGH1
+0066: 288F; --         SUB     ADC_VAL
+0067: 6070; --         JNEG    C1_Fail
+0068: 0892; --         LOAD    PASS_COUNT
+0069: 2094; --         ADD     One
+006A: 1092; --         STORE   PASS_COUNT
+006B: 0892; --         LOAD    PASS_COUNT
+006C: 2896; --         SUB     Three
+006D: 7071; --         JZERO   C1_Success
+006E: 807D; --         CALL    TinyDelay
+006F: 585F; --         JUMP    C1_Loop
+0070: 8800; --         RETURN
+0071: 0894; --         LOAD    One
+0072: 1091; --         STORE   CHECK_OK
+0073: 8800; --         RETURN
+0074: 9000; --         IN      Switches
+0075: 3899; --         AND     SW9_MASK
+0076: 7074; --         JZERO   WFHighLoop
+0077: 8800; --         RETURN
+0078: 9000; --         IN      Switches
+0079: 3899; --         AND     SW9_MASK
+007A: 707C; --         JZERO   WFLowDone
+007B: 5878; --         JUMP    WFLowLoop
+007C: 8800; --         RETURN
+007D: 08A3; --         LOAD    DLY_TINY
+007E: 1090; --         STORE   COUNT
+007F: 0890; --         LOAD    COUNT
+0080: 7084; --         JZERO   TDDone
+0081: 2894; --         SUB     One
+0082: 1090; --         STORE   COUNT
+0083: 587F; --         JUMP    TDLoop
+0084: 8800; --         RETURN
+0085: 08A4; --         LOAD    DLY_SHORT
+0086: 1090; --         STORE   COUNT
+0087: 0890; --         LOAD    COUNT
+0088: 708C; --         JZERO   SDDone
+0089: 2894; --         SUB     One
+008A: 1090; --         STORE   COUNT
+008B: 5887; --         JUMP    SDLoop
+008C: 8800; --         RETURN
+008D: 0000; -- STATE:              DW      &amp;H0000
+008E: 0000; -- CUR_CH:             DW      &amp;H0000
+008F: 0000; -- ADC_VAL:            DW      &amp;H0000
+0090: 0000; -- COUNT:              DW      &amp;H0000
+0091: 0000; -- CHECK_OK:           DW      &amp;H0000
+0092: 0000; -- PASS_COUNT:         DW      &amp;H0000
+0093: 0000; -- Zero:               DW      &amp;H0000
+0094: 0001; -- One:                DW      &amp;H0001
+0095: 0002; -- Two:                DW      &amp;H0002
+0096: 0003; -- Three:              DW      &amp;H0003
+0097: 0001; -- ADC_START:          DW      &amp;H0001
+0098: 0001; -- READY_MASK:         DW      &amp;H0001
+0099: 0200; -- SW9_MASK:           DW      &amp;H0200      ; bit 9 of Switches
+009A: 0100; -- LOW0:               DW      &amp;H0100
+009B: 01FF; -- HIGH0:              DW      &amp;H01FF
+009C: 0200; -- LOW1:               DW      &amp;H0200
+009D: 02FF; -- HIGH1:              DW      &amp;H02FF
+009E: 0001; -- LED_STEP0:          DW      &amp;H0001
+009F: 0003; -- LED_STEP1:          DW      &amp;H0003
+00A0: 03FF; -- LED_UNLOCK:         DW      &amp;H03FF
+00A1: 000C; -- UNLOCK_HEX0:        DW      &amp;H000C
+00A2: 000D; -- UNLOCK_HEX1:        DW      &amp;H000D
+00A3: 0010; -- DLY_TINY:           DW      &amp;H0010
+00A4: 00FF; -- DLY_SHORT:          DW      &amp;H00FF
+[00A5..07FF] : 0000; -- [empty memory]
+END;
+

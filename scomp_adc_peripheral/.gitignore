@@ -1,0 +1,6 @@
+.DS_Store
+*.bak
+*.qws
+ADCTest/db/
+ADCTest/incremental_db/
+ADCTest/output_files/

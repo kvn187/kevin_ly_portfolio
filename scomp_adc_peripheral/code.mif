@@ -1,0 +1,31 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: 1800; --         LOADI   0
+0001: 98C3; --         OUT     ADC_CHANNEL      ; select ADC channel 0
+0002: 1801; --         LOADI   1
+0003: 98C0; --         OUT     ADC_CTRL         ; START conversion
+0004: 1832; --         LOADI   50
+0005: 37FF; --         ADDI    -1
+0006: 6805; --         JPOS    DelayLoop
+0007: 90C2; --         IN      ADC_DATA
+0008: 1014; --         STORE   SAMPLE
+0009: 0814; --         LOAD    SAMPLE
+000A: 9801; --         OUT     LEDs
+000B: 0814; --         LOAD    SAMPLE
+000C: 3813; --         AND     MASK_LOW_NIBBLE
+000D: 9804; --         OUT     Hex0
+000E: 0814; --         LOAD    SAMPLE
+000F: 5014; --         SHIFT   -4
+0010: 3813; --         AND     MASK_LOW_NIBBLE
+0011: 9805; --         OUT     Hex1
+0012: 5802; --         JUMP    MainLoop
+0013: 000F; -- MASK_LOW_NIBBLE:    DW      &amp;H000F
+0014: 0000; -- SAMPLE:             DW      &amp;H0000
+[0015..07FF] : 0000; -- [empty memory]
+END;
+
