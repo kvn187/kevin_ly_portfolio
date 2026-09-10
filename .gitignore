@@ -1,0 +1,32 @@
+# Operating-system metadata
+.DS_Store
+
+# Editor metadata
+.vscode/
+
+# Compiled binaries and archives
+*.o
+*.out
+*.exe
+*.tar.gz
+*.zip
+
+# Simulation output
+*.vcd
+*.log
+
+# Reproducible simulator workloads (kept out of the portfolio repository to
+# avoid committing large trace files)
+/cache_simulator/Traces/
+/virtual_memory_simulator/traces/
+
+# Generated simulator libraries and transcripts
+**/work/
+**/transcript
+
+# Generated Quartus output
+**/db/
+**/incremental_db/
+**/output_files/
+**/simulation/
+**/SOF-Build-*/
