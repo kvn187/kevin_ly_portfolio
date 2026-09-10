@@ -1,8 +1,8 @@
 # Kevin Ly — Hardware and Systems Portfolio
 
-A curated collection of independent hardware, computer-architecture, and operating-systems projects. These projects were developed separately and assembled here as a single public portfolio in September 2026; each project directory has its own README with implementation details and run instructions.
+Portfolio collecting independent hardware, computer-architecture, and operating-systems projects. The projects were developed separately (Spring / Fall 2026) and assembled together as a single public portfolio September 2026.
 
-## Projects
+# Projects
 
 | Project | Focus | Technologies |
 | --- | --- | --- |
@@ -14,6 +14,6 @@ A curated collection of independent hardware, computer-architecture, and operati
 | [Virtual Memory Simulator](virtual_memory_simulator/) | Paging, page faults, swapping, frame allocation, and page replacement | C |
 | [Cache Simulator](cache_simulator/) | Configurable cache behavior, hit/miss statistics, writebacks, and LRU replacement | C |
 
-## Repository notes
+# Note
 
-The repository intentionally excludes generated simulator libraries, compiled hardware outputs, and large workload traces. The source code, build files, testbenches, and project documentation remain available for review. Where a simulator requires workload traces, use compatible course or custom traces with the documented build commands.
+The repository excludes generated simulator libraries, compiled hardware outputs, and large workload traces. The source code, build files, testbenches, and project documentation are still available.
